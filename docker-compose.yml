@@ -1,0 +1,35 @@
+#version: '3.9'
+services:
+  app:
+    build: .
+    ports:
+      - "9092:9090"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/roadsurveydb
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=Crosshood@442
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+    depends_on:
+      - db
+    networks:
+      - springboot-network
+
+  db:
+    image: postgres:18
+    environment:
+      - POSTGRES_DB=roadsurveydb
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=Crosshood@442
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - springboot-network
+
+volumes:
+  postgres_data:
+
+networks:
+  springboot-network:
+    driver: bridge
